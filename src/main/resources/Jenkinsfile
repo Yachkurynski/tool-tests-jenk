@@ -1,0 +1,54 @@
+node {
+
+    def tool = new Tool(this)
+
+    stage('CleanUp') {
+        fileOperations([folderDeleteOperation('')])
+    }
+
+    stage('Git') {
+
+//        git branch: 'tool', credentialsId: 'ded4ba1f-ac90-483e-aa06-8ce73b1d12ca', url: 'https://github.com/Yachkurynski/tool-tests'
+    }
+
+    stage('Gradle') {
+
+        dir(tool.getRoot()) {
+            bat 'gradle shadowJar'
+
+            tool.runJar()
+        }
+    }
+
+}
+
+class Tool {
+
+    def pipe
+    def mainClass = 'com.tool.automation.core.runner.ToolTestRunner'
+
+    def root = 'tool-tests'
+
+    def params = [
+            "url": "http://10.6.220.15:8090/tool-0.1/",
+            "excel": "test-input"
+    ]
+
+    Tool(def pipe) {
+        this.pipe = pipe
+    }
+
+    String getRoot() {
+        return root
+    }
+
+    String runJar() {
+        String paramString = params.collect { k, v -> "-$k \"$v\"" }.join(" ")
+
+        if (pipe.params.api) {
+            paramString = paramString + " -api"
+        }
+        pipe.bat "java -cp at_tool-1.0.jar ${mainClass} ${paramString}"
+    }
+}
+
