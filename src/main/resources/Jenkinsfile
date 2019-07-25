@@ -7,7 +7,8 @@ node {
     }
 
     stage('Git') {
-        git branch: 'tool', credentialsId: 'ded4ba1f-ac90-483e-aa06-8ce73b1d12ca', url: 'https://github.com/Yachkurynski/tool-tests'
+
+//        git branch: 'tool', credentialsId: 'ded4ba1f-ac90-483e-aa06-8ce73b1d12ca', url: 'https://github.com/Yachkurynski/tool-tests'
     }
 
     stage('Gradle') {
@@ -29,7 +30,7 @@ class Tool {
     def root = 'tool-tests'
 
     def params = [
-            "url": "http://10.6.220.15:8090/tool-0.1/"
+            "url": "http://10.6.220.15:8090/tool-0.1/",
             "excel": "test-input"
     ]
 
