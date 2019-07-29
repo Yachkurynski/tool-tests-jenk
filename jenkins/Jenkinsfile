@@ -24,7 +24,7 @@ class Tool {
 
     def pipe
     def mainClass = 'com.tool.automation.core.runner.ToolTestRunner'
-    def root = 'tool-tests'
+    def root = ''
 
     Tool(def pipe) {
         this.pipe = pipe
