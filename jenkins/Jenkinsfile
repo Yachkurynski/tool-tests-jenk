@@ -7,7 +7,7 @@ node {
     }
 
     stage('Git') {
-        git branch: 'master', credentialsId: "${params.credentials}", url: "${params.framework_url}"
+        git branch: "${params.branch}", credentialsId: "${params.credentials}", url: "${params.framework_url}"
     }
 
     stage('Gradle') {
