@@ -7,15 +7,13 @@ node {
     }
 
     stage('Git') {
-
-//        git branch: 'tool', credentialsId: 'ded4ba1f-ac90-483e-aa06-8ce73b1d12ca', url: 'https://github.com/Yachkurynski/tool-tests'
+        git branch: "${params.branch}", credentialsId: "${params.credentials}", url: "${params.framework_url}"
     }
 
     stage('Gradle') {
 
         dir(tool.getRoot()) {
-            bat 'gradle shadowJar'
-
+            tool.createJar()
             tool.runJar()
         }
     }
@@ -26,24 +24,18 @@ class Tool {
 
     def pipe
     def mainClass = 'com.tool.automation.core.runner.ToolTestRunner'
-
     def root = 'tool-tests'
-
-    def params = [
-            "url": "http://10.6.220.15:8090/tool-0.1/",
-            "excel": "test-input"
-    ]
 
     Tool(def pipe) {
         this.pipe = pipe
     }
 
-    String getRoot() {
-        return root
+    void createJar() {
+        pipe.bat 'gradle shadowJar'
     }
 
     String runJar() {
-        String paramString = params.collect { k, v -> "-$k \"$v\"" }.join(" ")
+        String paramString = "-url \"${pipe.params.application_url}\" -excel \"test-input/${pipe.params.suite}/${pipe.params.case}.xlsx\""
 
         if (pipe.params.api) {
             paramString = paramString + " -api"
