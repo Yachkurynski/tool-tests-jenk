@@ -1,11 +1,13 @@
 package com.tool.automation.core.runner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.testng.ITestListener;
+import org.testng.ITestNGListener;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlInclude;
@@ -18,20 +20,21 @@ public class TestNGBuilder {
   private Class<?> module;
   private Map<String, XmlClass> xmlTestClasses;
   private Map<String, XmlTest> xmlTests;
-  private ITestListener listener;
+  private List<ITestNGListener> listeners;
 
   public TestNGBuilder() {
     xmlSuite = new XmlSuite();
     xmlTestClasses = new HashMap<>();
     xmlTests = new HashMap<>();
+    listeners = new ArrayList<>();
   }
 
   public void withParentModule(Class<?> module) {
     this.module = module;
   }
 
-  public void withListener(ITestListener listener) {
-    this.listener = listener;
+  public void withListener(ITestNGListener listener) {
+    listeners.add(listener);
   }
 
   public void withTestClass(String testName, Class<?> testClass) {
@@ -68,8 +71,8 @@ public class TestNGBuilder {
       xmlSuite.setParentModule(module.getName());
     }
 
-    if(null != listener) {
-      testNG.addListener(listener);
+    if(!listeners.isEmpty()) {
+      listeners.forEach(testNG::addListener);
     }
     testNG.setXmlSuites(Arrays.asList(xmlSuite));
     return testNG;

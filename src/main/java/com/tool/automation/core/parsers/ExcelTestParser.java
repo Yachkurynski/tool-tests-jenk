@@ -84,7 +84,7 @@ public class ExcelTestParser {
         String paramStr = getCellValue(row, ColumnNames.PARAMETERS);
 
         if (StringUtils.isNotBlank(paramStr)) {
-            Arrays.stream(paramStr.split(", ")).forEach(str ->
+            Arrays.stream(paramStr.split(";")).forEach(str ->
                     parameters.put(StringUtils.substringBefore(str, "="),
                             StringUtils.substringAfter(str, "=")));
         }

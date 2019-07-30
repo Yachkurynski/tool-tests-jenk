@@ -43,6 +43,8 @@ public class ToolTestRunner {
     TestNG testng = builder.build();
 
     testng.run();
+
+    System.exit(testng.getStatus());
   }
 
   private static void fillTestFlow(File source, int fileCounter, Map<String, SingleTest> testFlow) {
