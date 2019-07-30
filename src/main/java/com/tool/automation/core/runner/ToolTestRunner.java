@@ -14,7 +14,6 @@ import org.testng.TestNG;
 public class ToolTestRunner {
 
   private static Config config;
-  private static final int FAILED_STATUS_CODE = 1;
 
   public static void main(String[] args) {
     config = new Config();
@@ -23,7 +22,6 @@ public class ToolTestRunner {
     TestNGBuilder builder = new TestNGBuilder();
 
     builder.withListener(new ATToolListener());
-    builder.withListener(new FailsInterceptor());
     builder.withParentModule(ToolActionsModule.class);
 
     Map<String, SingleTest> testFlow = new LinkedHashMap<>();
@@ -46,9 +44,7 @@ public class ToolTestRunner {
 
     testng.run();
 
-    if (FailsInterceptor.failed) {
-      System.exit(FAILED_STATUS_CODE);
-    }
+    System.exit(testng.getStatus());
   }
 
   private static void fillTestFlow(File source, int fileCounter, Map<String, SingleTest> testFlow) {
