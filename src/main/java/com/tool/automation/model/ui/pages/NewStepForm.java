@@ -14,14 +14,8 @@ import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
 public class NewStepForm extends HtmlElement {
 
-  private static final String ROW = "./tbody/tr[%d]";
   private static final String COLUMN = "./td[%d]";
   private static final String NAME_SELECT = "/div/div";
-
-  public NewStepForm(int rowNumber) {
-    super();
-    setWrappedElement(findElement(xpath(format(ROW, rowNumber))));
-  }
 
   public void selectObject(String object) {
     new TableSelect(findElement(id("dDObject"))).selectValue(object);

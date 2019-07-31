@@ -16,6 +16,8 @@ import org.testng.ITestResult;
 @Log4j
 public class ATToolListener extends ReportPortalTestNGListener {
 
+  private static final String API_PROP = "api";
+
   @Override
   public void onTestStart(ITestResult iTestResult) {
     super.onTestStart(iTestResult);
@@ -28,7 +30,8 @@ public class ATToolListener extends ReportPortalTestNGListener {
 
   @Override
   public void onTestFailure(ITestResult result) {
-    if (!ToolTestRunner.getConfig().isApi()) {
+
+    if (!Boolean.valueOf(System.getProperty(API_PROP))) {
       saveScreenShoot();
     }
 

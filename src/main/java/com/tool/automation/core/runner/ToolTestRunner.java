@@ -2,7 +2,6 @@ package com.tool.automation.core.runner;
 
 
 import com.tool.automation.core.beans.SingleTest;
-import com.tool.automation.core.parsers.CmdLineParser;
 import com.tool.automation.core.parsers.ExcelTestParser;
 import java.io.File;
 import java.util.Arrays;
@@ -13,19 +12,16 @@ import org.testng.TestNG;
 
 public class ToolTestRunner {
 
-  private static Config config;
+  private static final String EXCEL_PROP = "excel";
 
   public static void main(String[] args) {
-    config = new Config();
-    CmdLineParser.parse(config, args);
-
     TestNGBuilder builder = new TestNGBuilder();
 
     builder.withListener(new ATToolListener());
     builder.withParentModule(ToolActionsModule.class);
 
     Map<String, SingleTest> testFlow = new LinkedHashMap<>();
-    File source = new File(config.getExcel());
+    File source = new File(System.getProperty(EXCEL_PROP));
     AtomicInteger fileCounter = new AtomicInteger(1);
 
     if(source.isDirectory()) {
@@ -52,9 +48,5 @@ public class ToolTestRunner {
 
     ExcelTestParser.of(source).get()
         .forEach(test->testFlow.put(String.format("%d.%d [%s] %s", fileCounter, counter.getAndIncrement(), source.getName(), test.toString()), test));
-  }
-
-  public static Config getConfig() {
-    return config;
   }
 }
