@@ -1,6 +1,7 @@
 package com.tool.automation.core.runner;
 
 import com.codeborne.selenide.WebDriverRunner;
+import com.google.inject.Inject;
 import com.tool.automation.core.exceptions.ATToolRuntimeException;
 import com.epam.reportportal.message.ReportPortalMessage;
 import com.epam.reportportal.testng.ReportPortalTestNGListener;
@@ -16,11 +17,7 @@ import org.testng.ITestResult;
 @Log4j
 public class ATToolListener extends ReportPortalTestNGListener {
 
-  private Config config;
-
-  public ATToolListener(Config config) {
-    this.config = config;
-  }
+  @Inject private Config config;
 
   @Override
   public void onTestStart(ITestResult iTestResult) {

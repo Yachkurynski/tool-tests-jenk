@@ -20,7 +20,7 @@ public class ToolTestRunner {
 
     TestNGBuilder builder = new TestNGBuilder();
 
-    builder.withListener(new ATToolListener(config));
+    builder.withListener(injector.getInstance(ATToolListener.class));
     builder.withParentModule(ToolActionsModule.class);
 
     Map<String, SingleTest> testFlow = new LinkedHashMap<>();
