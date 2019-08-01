@@ -16,7 +16,11 @@ import org.testng.ITestResult;
 @Log4j
 public class ATToolListener extends ReportPortalTestNGListener {
 
-  private static final String API_PROP = "api";
+  private Config config;
+
+  public ATToolListener(Config config) {
+    this.config = config;
+  }
 
   @Override
   public void onTestStart(ITestResult iTestResult) {
@@ -31,7 +35,7 @@ public class ATToolListener extends ReportPortalTestNGListener {
   @Override
   public void onTestFailure(ITestResult result) {
 
-    if (!Boolean.valueOf(System.getProperty(API_PROP))) {
+    if (!config.isApi()) {
       saveScreenShoot();
     }
 

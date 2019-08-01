@@ -1,6 +1,8 @@
 package com.tool.automation.core.runner;
 
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.tool.automation.core.beans.SingleTest;
 import com.tool.automation.core.parsers.ExcelTestParser;
 import java.io.File;
@@ -12,16 +14,17 @@ import org.testng.TestNG;
 
 public class ToolTestRunner {
 
-  private static final String EXCEL_PROP = "excel";
-
   public static void main(String[] args) {
+    Injector injector = Guice.createInjector(new StartupPropertiesModule());
+    Config config = injector.getInstance(Config.class);
+
     TestNGBuilder builder = new TestNGBuilder();
 
-    builder.withListener(new ATToolListener());
+    builder.withListener(new ATToolListener(config));
     builder.withParentModule(ToolActionsModule.class);
 
     Map<String, SingleTest> testFlow = new LinkedHashMap<>();
-    File source = new File(System.getProperty(EXCEL_PROP));
+    File source = new File(config.getExcel());
     AtomicInteger fileCounter = new AtomicInteger(1);
 
     if(source.isDirectory()) {

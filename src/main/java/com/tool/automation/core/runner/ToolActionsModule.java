@@ -1,7 +1,6 @@
 package com.tool.automation.core.runner;
 
-import com.google.inject.name.Names;
-import com.tool.automation.core.exceptions.ATToolRuntimeException;
+import com.tool.automation.core.utils.PropertyUtils;
 import com.tool.automation.model.ui.pages.PageFactory;
 import com.tool.automation.model.ui.services.WebDriverService;
 import com.google.inject.AbstractModule;
@@ -27,34 +26,18 @@ import com.tool.automation.implementation.ui.UISuiteActions;
 import com.tool.automation.implementation.ui.UITemplateActions;
 import com.tool.automation.implementation.ui.UITestActions;
 import com.tool.automation.implementation.ui.UIToolActions;
-import java.io.IOException;
-import java.util.Properties;
 
 public class ToolActionsModule extends AbstractModule {
 
-  private static final String PROP_FILE = "default.properties";
   private static final String API_PROP = "api";
 
   @Override
   protected void configure() {
     Config config = new Config();
-    Properties props = new Properties();
 
-    try {
-      props.load(getClass().getClassLoader().getResourceAsStream(PROP_FILE));
+    PropertyUtils.bindProperties(binder());
 
-      System.getProperties().forEach((k,v)-> {
-        if (props.containsKey(k)) {
-          props.put(k,v);
-        }
-      });
-
-      Names.bindProperties(binder(), props);
-    } catch (IOException e) {
-      throw new ATToolRuntimeException("Can't load properties.");
-    }
-
-    if (Boolean.valueOf(props.getProperty(API_PROP))) {
+    if (Boolean.valueOf(System.getProperty(API_PROP))) {
       bind(IAddStepFormActions.class).to(APIAddStepFormActions.class);
       bind(ICasesTabActions.class).to(APICasesTabActions.class);
       bind(ICommonActions.class).to(APICommonActions.class);
