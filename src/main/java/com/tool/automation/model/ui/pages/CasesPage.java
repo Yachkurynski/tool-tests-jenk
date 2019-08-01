@@ -34,6 +34,7 @@ public class CasesPage extends Page {
   private Button addTestButton;
 
   @Getter
+  @FindBy(xpath = TESTS_FORM + "//table[@class='table table-sm table-bordered table-hover']")
   private TestStepsTable stepsTable;
   
   public void addSuite(String suite) {

@@ -14,29 +14,31 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
-@FindBy(xpath = "//table[@class='table table-sm table-bordered table-hover']")
 public class TestStepsTable extends HtmlElement {
 
   private static final String COLUMN_DATA = "./tbody/tr/td[%d]";
   private static final String ROW = "./tbody/tr[%d]";
   private static final String CELL_DATA = ROW + "/td[%d]";
 
+  @FindBy(xpath = ".//tbody/tr[td[input[@type='button']]]")
+  private NewStepForm newStep;
+
   public List<String> getActionsColumnValues() {
-    return getColumnValues(format(COLUMN_DATA + "/b", StepsTableColumns.ACTION_AND_ARGS.getColumn()));
+    return getColumnValues(format(COLUMN_DATA, StepsTableColumns.ACTION_AND_ARGS.getColumn()) + "/b");
   }
 
   public void addStep(String object, String name, String action, String arguments) {
-    addStep(getActionsColumnValues().size() + 1, object, name, action, arguments);
+    addNewStep(object, name, action, arguments);
   }
 
   public void addStepAbove(int row, String object, String name, String action, String arguments) {
     selectOtherOption(row,"Add above");
-    addStep(row, object, name, action, arguments);
+    addNewStep(object, name, action, arguments);
   }
 
   public void addStepBelow(int row, String object, String name, String action, String arguments) {
     selectOtherOption(row, "Add below");
-    addStep(row + 1, object, name, action, arguments);
+    addNewStep(object, name, action, arguments);
   }
 
   public List<String> getNameColumnValues() {
@@ -44,7 +46,7 @@ public class TestStepsTable extends HtmlElement {
   }
 
   public List<String> getObjectsColumnValues() {
-    return getColumnValues(format(COLUMN_DATA + "/b", StepsTableColumns.OBJECT.getColumn()));
+    return getColumnValues(format(COLUMN_DATA, StepsTableColumns.OBJECT.getColumn()) + "/b");
   }
 
   public List<String> getArgumentsColumnValues(int row) {
@@ -58,8 +60,7 @@ public class TestStepsTable extends HtmlElement {
         .collect(Collectors.toList());
   }
 
-  private void addStep(int row, String object, String name, String action, String arguments) {
-    NewStepForm newStep = new NewStepForm(row);
+  private void addNewStep(String object, String name, String action, String arguments) {
 
     newStep.selectObject(object);
     newStep.selectName(name);
@@ -82,26 +83,26 @@ public class TestStepsTable extends HtmlElement {
   }
 
   public void selectObject(String object) {
-    new NewStepForm(getObjectsColumnValues().size() + 1).selectObject(object);
+    new NewStepForm().selectObject(object);
   }
 
   public List<String> getLocationNames() {
-    return new NewStepForm(getObjectsColumnValues().size() + 1).getNames();
+    return new NewStepForm().getNames();
   }
 
   public void selectAction(String action) {
-    new NewStepForm(getObjectsColumnValues().size() + 1).selectAction(action);
+    new NewStepForm().selectAction(action);
   }
 
   public List<String> getParameters() {
-    return new NewStepForm(getObjectsColumnValues().size() + 1).getArguments();
+    return new NewStepForm().getArguments();
   }
 
   public void typeAndSelectName(String name) {
-    new NewStepForm(getObjectsColumnValues().size() + 1).typeAndSelectName(name);
+    new NewStepForm().typeAndSelectName(name);
   }
 
   public void selectName(String name) {
-    new NewStepForm(getObjectsColumnValues().size() + 1).selectName(name);
+    new NewStepForm().selectName(name);
   }
 }

@@ -1,7 +1,6 @@
 package com.tool.automation.core.runner;
 
-import com.tool.automation.core.runner.Config;
-import com.tool.automation.core.runner.ToolTestRunner;
+import com.tool.automation.core.utils.PropertyUtils;
 import com.tool.automation.model.ui.pages.PageFactory;
 import com.tool.automation.model.ui.services.WebDriverService;
 import com.google.inject.AbstractModule;
@@ -30,11 +29,15 @@ import com.tool.automation.implementation.ui.UIToolActions;
 
 public class ToolActionsModule extends AbstractModule {
 
+  private static final String API_PROP = "api";
+
   @Override
   protected void configure() {
-    Config config = ToolTestRunner.getConfig();
+    Config config = new Config();
 
-    if (config.isApi()) {
+    PropertyUtils.bindProperties(binder());
+
+    if (Boolean.valueOf(System.getProperty(API_PROP))) {
       bind(IAddStepFormActions.class).to(APIAddStepFormActions.class);
       bind(ICasesTabActions.class).to(APICasesTabActions.class);
       bind(ICommonActions.class).to(APICommonActions.class);
@@ -53,7 +56,6 @@ public class ToolActionsModule extends AbstractModule {
     }
 
     bind(Config.class).toInstance(config);
-
     bind(WebDriverService.class).in(Scopes.SINGLETON);
     bind(PageFactory.class).in(Scopes.SINGLETON);
   }

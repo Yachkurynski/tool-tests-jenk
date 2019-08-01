@@ -1,19 +1,21 @@
 package com.tool.automation.core.runner;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import lombok.Getter;
-import org.kohsuke.args4j.Option;
-import org.kohsuke.args4j.spi.BooleanOptionHandler;
 
 @Getter
 public class Config {
 
-
-  @Option(name = "-url")
+  @Inject
+  @Named("url")
   private String url;
 
-  @Option(name = "-excel")
+  @Inject
+  @Named("excel")
   private String excel;
 
-  @Option(name = "-api", handler = BooleanOptionHandler.class)
+  @Inject
+  @Named("api")
   private boolean api;
 }

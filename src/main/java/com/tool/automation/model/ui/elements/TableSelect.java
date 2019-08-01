@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
+import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 public class TableSelect extends TypifiedElement {
 
@@ -19,6 +20,7 @@ public class TableSelect extends TypifiedElement {
 
   public TableSelect(WebElement wrappedElement) {
     super(wrappedElement);
+    HtmlElementLoader.populatePageObject(this, wrappedElement);
   }
 
   public void selectValue(String value) {
