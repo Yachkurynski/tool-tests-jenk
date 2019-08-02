@@ -20,16 +20,6 @@ public abstract class CommonTestObject {
     private String locationName;
     @Inject
     private ITemplateActions templateActions;
-    @Inject
-    private IToolActions toolActions;
-    @Inject
-    private ICasesTabActions casesTabActions;
-    @Inject
-    private ISuiteActions suiteActions;
-    @Inject
-    private ITestActions testActions;
-    @Inject
-    private IAddStepFormActions addStepFormActions;
 
     @BeforeClass
     @Parameters({
@@ -56,31 +46,6 @@ public abstract class CommonTestObject {
     protected ITemplateActions getTemplateActions() {
         templateActions.setLocationName(locationName);
         return templateActions;
-    }
-
-    protected IToolActions getToolActions() {
-        toolActions.setLocationName(locationName);
-        return toolActions;
-    }
-
-    protected ICasesTabActions getCasesTabActions() {
-        casesTabActions.setLocationName(locationName);
-        return casesTabActions;
-    }
-
-    protected ISuiteActions getSuiteActions() {
-        suiteActions.setLocationName(locationName);
-        return suiteActions;
-    }
-
-    protected ITestActions getTestActions() {
-        testActions.setLocationName(locationName);
-        return testActions;
-    }
-
-    protected IAddStepFormActions getAddStepFormActions() {
-        addStepFormActions.setLocationName(locationName);
-        return addStepFormActions;
     }
 
 }
