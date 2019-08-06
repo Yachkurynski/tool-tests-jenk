@@ -12,9 +12,9 @@ public interface ITestActions
 
     void addStep(String object, String name, String action, String arguments);
 
-    void addStepAbove(Double row, String object, String name, String action, String arguments);
+    void addStepAbove(String object, String name, String action, String arguments, Double row);
 
-    void addStepBelow(Double row, String object, String name, String action, String arguments);
+    void addStepBelow(String object, String name, String action, String arguments, Double row);
 
     void hasLocationNames(List<String> names);
 
@@ -22,6 +22,6 @@ public interface ITestActions
 
     void hasObjectActions(List<String> actions);
 
-    void hasArguments(Double row, List<String> arguments);
+    void hasArguments(List<String> arguments);
 
 }
