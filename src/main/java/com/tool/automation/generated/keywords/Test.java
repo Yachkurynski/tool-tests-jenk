@@ -37,12 +37,13 @@ public class Test
         "object",
         "name",
         "action",
-        "arguments"
+        "arguments",
+        "row"
     })
     public void addStepAbove(String object, String name, String action,
         @Optional
         String arguments, Double row) {
-        getTestActions().addStepAbove(row, object, name, action, arguments);
+        getTestActions().addStepAbove(object, name, action, arguments, row);
     }
 
     @org.testng.annotations.Test
@@ -50,12 +51,13 @@ public class Test
         "object",
         "name",
         "action",
-        "arguments"
+        "arguments",
+        "row"
     })
     public void addStepBelow(String object, String name, String action,
         @Optional
         String arguments, Double row) {
-        getTestActions().addStepBelow(row, object, name, action, arguments);
+        getTestActions().addStepBelow(object, name, action, arguments, row);
     }
 
     @org.testng.annotations.Test
@@ -94,8 +96,8 @@ public class Test
     })
     public void hasArguments(
         @Named("List.String")
-        String arguments_JsonListOfString, Double row) {
-        getTestActions().hasArguments(row, jsonToList(arguments_JsonListOfString, String.class));
+        String arguments_JsonListOfString) {
+        getTestActions().hasArguments(jsonToList(arguments_JsonListOfString, String.class));
     }
 
 }
