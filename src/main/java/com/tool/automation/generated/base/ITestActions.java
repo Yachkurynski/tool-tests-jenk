@@ -22,6 +22,6 @@ public interface ITestActions
 
     void hasObjectActions(List<String> actions);
 
-    void hasArguments(List<String> arguments);
+    void hasArguments(List<String> arguments, Double row);
 
 }
