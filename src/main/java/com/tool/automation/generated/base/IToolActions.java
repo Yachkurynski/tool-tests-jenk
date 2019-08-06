@@ -13,4 +13,8 @@ public interface IToolActions
 
     void toTemplatesTab();
 
+    void importData(String fileName);
+
+    void clearData();
+
 }
