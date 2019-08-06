@@ -20,6 +20,16 @@ public class UIToolActions extends UICommonActions implements IToolActions {
     openTab(ToolTabs.TEMPLATES);
   }
 
+  @Override
+  public void importData(String fileName) {
+    getFactory().getKeywordsPage().importData(fileName);
+  }
+
+  @Override
+  public void clearData() {
+    getFactory().getKeywordsPage().clearData();
+  }
+
   private void openTab(ToolTabs tab) {
     startIfNotStarted();
     getFactory().getKeywordsPage().openTab(tab);

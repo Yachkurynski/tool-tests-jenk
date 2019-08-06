@@ -3,10 +3,14 @@ package com.tool.automation.model.ui.pages;
 import static java.lang.String.format;
 import static org.openqa.selenium.By.xpath;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.tool.automation.model.enums.StepsTableColumns;
 import com.tool.automation.model.ui.elements.TableSelect;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
@@ -63,13 +67,20 @@ public class TestStepsTable extends HtmlElement {
   private void addNewStep(String object, String name, String action, String arguments) {
 
     newStep.selectObject(object);
-    newStep.selectName(name);
+    newStep.typeAndSelectName(name);
     newStep.selectAction(action);
 
     if (StringUtils.isNotBlank(arguments)) {
-      newStep.typeArgument(arguments);
+      Map<String, String> argsMap = parseArguments(arguments);
+      argsMap.forEach(newStep::typeArgument);
     }
     newStep.clickAddStep();
+  }
+
+  private Map<String, String> parseArguments(String arguments) {
+    Type dataType = new TypeToken<Map<String, String>>() {}.getType();
+
+    return new Gson().fromJson(String.format("{%s}", arguments), dataType);
   }
 
   private By getCellLocator(int row, StepsTableColumns column, String xpath) {
@@ -79,7 +90,7 @@ public class TestStepsTable extends HtmlElement {
   private void selectOtherOption(int row, String option) {
     new TableSelect(findElement(
         getCellLocator(row, StepsTableColumns.OTHER, "//div[@class='show dropdown']")))
-        .selectValue(option);
+        .select(option);
   }
 
   public void selectObject(String object) {
