@@ -20,6 +20,10 @@ public class NewStepForm extends HtmlElement {
 
   public void selectObject(String object) {
     new TableSelect(findElement(id("dDObject"))).select(object);
+
+    String nameSelectXpath = getElementInColumnXpath(StepsTableColumns.NAME, NAME_SELECT);
+
+    DriverUtils.waitUntilVisible(this, nameSelectXpath);
   }
 
   public void selectName(String name) {
@@ -45,6 +49,7 @@ public class NewStepForm extends HtmlElement {
   public void typeArgument(String name, String value) {
     String argInputXpath = String.format("//table//td[label[text()='%s']]/input[@type='text']", name);
 
+    DriverUtils.waitUntilVisible(this, getElementInColumnXpath(StepsTableColumns.ACTION_AND_ARGS, argInputXpath));
     getElementInColumn(StepsTableColumns.ACTION_AND_ARGS, argInputXpath)
         .sendKeys(value);
   }
@@ -59,9 +64,10 @@ public class NewStepForm extends HtmlElement {
   }
 
   private List<WebElement> getElementsInColumn(StepsTableColumns column, String xpath) {
-    String element = format(COLUMN, column.getColumn()) + xpath;
+    return findElements(xpath(getElementInColumnXpath(column, xpath)));
+  }
 
-    DriverUtils.waitUntilVisible(getWrappedElement(), element);
-    return findElements(xpath(element));
+  private String getElementInColumnXpath(StepsTableColumns column, String xpath) {
+    return format(COLUMN, column.getColumn()) + xpath;
   }
 }

@@ -4,7 +4,6 @@ import com.tool.automation.core.runner.Config;
 import com.tool.automation.model.enums.ToolTabs;
 import com.tool.automation.model.ui.services.WebDriverService;
 import com.google.inject.Inject;
-import com.tool.automation.model.ui.utils.DriverUtils;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,7 +22,6 @@ public abstract class Page {
   }
 
   protected WebElement findElement(By by) {
-    DriverUtils.waitUntilVisible(getDriver(), by);
     return getDriver().findElement(by);
   }
 
