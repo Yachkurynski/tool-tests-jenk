@@ -2,6 +2,8 @@ package com.tool.automation.implementation.ui;
 
 import com.tool.automation.model.enums.ToolTabs;
 import com.tool.automation.generated.base.IToolActions;
+import com.tool.automation.model.ui.pages.KeywordsPage;
+import org.apache.commons.lang3.StringUtils;
 
 public class UIToolActions extends UICommonActions implements IToolActions {
 
@@ -22,11 +24,20 @@ public class UIToolActions extends UICommonActions implements IToolActions {
 
   @Override
   public void importData(String fileName) {
+    startIfNotStarted();
+
+    KeywordsPage keywordsPage = getFactory().getKeywordsPage();
+
+    if (!keywordsPage.isImportButtonPresent()) {
+      keywordsPage.clearData();
+    }
+    fileName = StringUtils.substring(getClass().getClassLoader().getResource(fileName).getPath(), 1);
     getFactory().getKeywordsPage().importData(fileName);
   }
 
   @Override
   public void clearData() {
+    startIfNotStarted();
     getFactory().getKeywordsPage().clearData();
   }
 

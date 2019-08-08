@@ -2,7 +2,7 @@ package com.tool.automation.model.ui.elements;
 
 import static java.lang.String.format;
 
-import com.tool.automation.model.ui.utils.ElementUtils;
+import com.tool.automation.model.ui.utils.DriverUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.openqa.selenium.By;
@@ -39,7 +39,7 @@ public class TableSelect extends TypifiedElement {
   }
 
   protected WebElement getExpandButton() {
-    ElementUtils.waitUntilVisible(getWrappedElement(), getExpandButtonXpath());
+    DriverUtils.waitUntilVisible(getWrappedElement(), getExpandButtonXpath());
     return findElement(By.xpath(getExpandButtonXpath()));
   }
 

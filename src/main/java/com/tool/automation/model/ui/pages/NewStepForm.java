@@ -7,7 +7,7 @@ import static org.openqa.selenium.By.xpath;
 import com.tool.automation.model.enums.StepsTableColumns;
 import com.tool.automation.model.ui.elements.TableSelect;
 import com.tool.automation.model.ui.elements.TableTypifiedSelect;
-import com.tool.automation.model.ui.utils.ElementUtils;
+import com.tool.automation.model.ui.utils.DriverUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.openqa.selenium.WebElement;
@@ -61,7 +61,7 @@ public class NewStepForm extends HtmlElement {
   private List<WebElement> getElementsInColumn(StepsTableColumns column, String xpath) {
     String element = format(COLUMN, column.getColumn()) + xpath;
 
-    ElementUtils.waitUntilVisible(getWrappedElement(), element);
+    DriverUtils.waitUntilVisible(getWrappedElement(), element);
     return findElements(xpath(element));
   }
 }

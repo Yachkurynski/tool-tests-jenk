@@ -17,12 +17,13 @@ import ru.yandex.qatools.htmlelements.element.Button;
 public class KeywordsPage extends Page {
 
   private static final String ACTION_NAME_SEPARATOR = ". ";
-  private static final String DATA_ACTION_BTN_XPATH = "//div[@role='group']/a[text()='%s']";
+  private static final String DATA_ACTION_BTN_XPATH = "//div[@role='group']//a[text()='%s']";
 
   @FindBy(xpath = ".//div[@class='col-sm-9']/div/div[@aria-hidden='false']")
   private ObjectActionsForm objectActionsForm;
   @FindBy(xpath = "//div[@class='nav-item']//a")
   private List<WebElement> testObjects;
+
 
   @FindBy(xpath = "//div[@role='group']/button[@aria-haspopup='true']")
   private Button manageDataBtn;
@@ -58,13 +59,22 @@ public class KeywordsPage extends Page {
 
   public void importData(String pathToFile) {
     manageDataBtn.click();
-    getDriver().findElement(By.id("dumpImport")).sendKeys(pathToFile);
+    findElement(By.id("dumpImport")).sendKeys(pathToFile);
     manageDataBtn.click();
+  }
+
+  public boolean isImportButtonPresent() {
+    manageDataBtn.click();
+
+    boolean present = !findElements(By.id("dumpImport")).isEmpty();
+
+    manageDataBtn.click();
+    return present;
   }
 
   public void clearData() {
     manageDataBtn.click();
-    getDriver().findElement(By.xpath(String.format(DATA_ACTION_BTN_XPATH, "Clear"))).click();
+    findElement(By.xpath(String.format(DATA_ACTION_BTN_XPATH, "Clear"))).click();
   }
 
   private String getObjectName(String action) {
