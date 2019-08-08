@@ -18,12 +18,12 @@ public class UITestActions extends UICommonActions implements ITestActions {
   }
 
   @Override
-  public void addStepAbove(Double row, String object, String name, String action, String arguments) {
+  public void addStepAbove(String object, String name, String action, String arguments, Double row) {
     table().addStepAbove(row.intValue(), object, name, action, arguments);
   }
 
   @Override
-  public void addStepBelow(Double row, String object, String name, String action, String arguments) {
+  public void addStepBelow(String object, String name, String action, String arguments, Double row) {
     table().addStepBelow(row.intValue(), object, name, action, arguments);
   }
 
@@ -43,7 +43,7 @@ public class UITestActions extends UICommonActions implements ITestActions {
   }
 
   @Override
-  public void hasArguments(Double row, List<String> arguments) {
+  public void hasArguments(List<String> arguments, Double row) {
     Assert.assertEquals(table().getArgumentsColumnValues(row.intValue()), arguments);
   }
 

@@ -7,6 +7,7 @@ import static org.openqa.selenium.By.xpath;
 import com.tool.automation.model.enums.StepsTableColumns;
 import com.tool.automation.model.ui.elements.TableSelect;
 import com.tool.automation.model.ui.elements.TableTypifiedSelect;
+import com.tool.automation.model.ui.utils.DriverUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.openqa.selenium.WebElement;
@@ -18,7 +19,11 @@ public class NewStepForm extends HtmlElement {
   private static final String NAME_SELECT = "/div/div";
 
   public void selectObject(String object) {
-    new TableSelect(findElement(id("dDObject"))).selectValue(object);
+    new TableSelect(findElement(id("dDObject"))).select(object);
+
+    String nameSelectXpath = getElementInColumnXpath(StepsTableColumns.NAME, NAME_SELECT);
+
+    DriverUtils.waitUntilVisible(this, nameSelectXpath);
   }
 
   public void selectName(String name) {
@@ -34,16 +39,19 @@ public class NewStepForm extends HtmlElement {
   }
 
   public void selectAction(String action) {
-    new TableSelect(findElement(id("dDAction"))).selectValue(action);
+    new TableSelect(findElement(id("dDAction"))).select(action);
   }
 
   public void clickAddStep() {
     getElementInColumn(StepsTableColumns.OTHER, "/input[@type='button']").click();
   }
 
-  public void typeArgument(String argument) {
-    getElementInColumn(StepsTableColumns.ACTION_AND_ARGS, "//table//input[@type='text']")
-        .sendKeys(argument);
+  public void typeArgument(String name, String value) {
+    String argInputXpath = String.format("//table//td[label[text()='%s']]/input[@type='text']", name);
+
+    DriverUtils.waitUntilVisible(this, getElementInColumnXpath(StepsTableColumns.ACTION_AND_ARGS, argInputXpath));
+    getElementInColumn(StepsTableColumns.ACTION_AND_ARGS, argInputXpath)
+        .sendKeys(value);
   }
 
   public List<String> getArguments() {
@@ -56,6 +64,10 @@ public class NewStepForm extends HtmlElement {
   }
 
   private List<WebElement> getElementsInColumn(StepsTableColumns column, String xpath) {
-    return findElements(xpath(format(COLUMN, column.getColumn()) + xpath));
+    return findElements(xpath(getElementInColumnXpath(column, xpath)));
+  }
+
+  private String getElementInColumnXpath(StepsTableColumns column, String xpath) {
+    return format(COLUMN, column.getColumn()) + xpath;
   }
 }

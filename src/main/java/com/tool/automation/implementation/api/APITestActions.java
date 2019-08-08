@@ -16,12 +16,12 @@ public class APITestActions extends APICommonActions implements ITestActions {
   }
 
   @Override
-  public void addStepAbove(Double row, String object, String name, String action, String arguments) {
+  public void addStepAbove(String object, String name, String action, String arguments, Double row) {
 
   }
 
   @Override
-  public void addStepBelow(Double row, String object, String name, String action, String arguments) {
+  public void addStepBelow(String object, String name, String action, String arguments, Double row) {
 
   }
 
@@ -41,7 +41,7 @@ public class APITestActions extends APICommonActions implements ITestActions {
   }
 
   @Override
-  public void hasArguments(Double row, List<String> arguments) {
+  public void hasArguments(List<String> arguments, Double row) {
 
   }
 }
