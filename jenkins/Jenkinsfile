@@ -35,12 +35,12 @@ class Tool {
     }
 
     String runJar() {
-        String paramString = "-url \"${pipe.params.application_url}\" -excel \"test-input/${pipe.params.suite}/${pipe.params.case}.xlsx\""
+        String paramString = "-Durl=\"${pipe.params.application_url}\" -Dexcel=\"test-input/${pipe.params.suite}/${pipe.params.case}.xlsx\""
 
         if (pipe.params.api) {
-            paramString = paramString + " -api"
+            paramString = paramString + " -Dapi=false"
         }
-        pipe.bat "java -cp at_tool-1.0.jar ${mainClass} ${paramString}"
+        pipe.bat "java ${paramString} -cp at_tool-1.0.jar ${mainClass}"
     }
 }
 
