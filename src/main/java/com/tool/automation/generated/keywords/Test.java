@@ -92,13 +92,13 @@ public class Test
 
     @org.testng.annotations.Test
     @Parameters({
-        "arguments",
-        "row"
+        "row",
+        "arguments"
     })
-    public void hasArguments(
-        @Named("List.String")
-        String arguments_JsonListOfString, Double row) {
-        getTestActions().hasArguments(jsonToList(arguments_JsonListOfString, String.class), row);
+    public void hasArguments(Double row,
+        @Named("Map.String")
+        String arguments_JsonMapOfString) {
+        getTestActions().hasArguments(row, jsonToMap(arguments_JsonMapOfString, String.class));
     }
 
 }
