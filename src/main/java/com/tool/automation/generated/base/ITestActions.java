@@ -2,6 +2,7 @@
 package com.tool.automation.generated.base;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ITestActions
     extends ICommonActions
@@ -22,6 +23,6 @@ public interface ITestActions
 
     void hasObjectActions(List<String> actions);
 
-    void hasArguments(List<String> arguments, Double row);
+    void hasArguments(Double row, Map<String, String> arguments);
 
 }
