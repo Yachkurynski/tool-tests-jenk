@@ -2,6 +2,7 @@ package com.tool.automation.implementation.api;
 
 import com.tool.automation.generated.base.ITestActions;
 import java.util.List;
+import java.util.Map;
 
 public class APITestActions extends APICommonActions implements ITestActions {
 
@@ -41,7 +42,7 @@ public class APITestActions extends APICommonActions implements ITestActions {
   }
 
   @Override
-  public void hasArguments(List<String> arguments, Double row) {
+  public void hasArguments(Double row, Map<String, String> arguments) {
 
   }
 }
