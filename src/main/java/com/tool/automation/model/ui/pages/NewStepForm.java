@@ -1,73 +1,63 @@
 package com.tool.automation.model.ui.pages;
 
-import static java.lang.String.format;
-import static org.openqa.selenium.By.id;
-import static org.openqa.selenium.By.xpath;
-
-import com.tool.automation.model.enums.StepsTableColumns;
-import com.tool.automation.model.ui.elements.TableSelect;
+import com.tool.automation.model.ui.elements.ActionSelect;
 import com.tool.automation.model.ui.elements.TableTypifiedSelect;
 import com.tool.automation.model.ui.utils.DriverUtils;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
+import ru.yandex.qatools.htmlelements.element.Select;
 
 public class NewStepForm extends HtmlElement {
 
-  private static final String COLUMN = "./td[%d]";
-  private static final String NAME_SELECT = "/div/div";
+  private static final String OBJECT_SELECT = "./select[1]";
+  private static final String NAME_SELECT = "./div[1]/div";
+  private static final String ACTION_SELECT = "./div[contains(@class, 'dropdown')]";
+
+  @FindBy(xpath = "./button[@type='submit']")
+  private Button addButton;
 
   public void selectObject(String object) {
-    new TableSelect(findElement(id("dDObject"))).select(object);
+    new Select(findElement(By.xpath(OBJECT_SELECT))).selectByVisibleText(object);
 
-    String nameSelectXpath = getElementInColumnXpath(StepsTableColumns.NAME, NAME_SELECT);
-
-    DriverUtils.waitUntilVisible(this, nameSelectXpath);
+    DriverUtils.waitUntilVisible(this, NAME_SELECT);
   }
 
   public void selectName(String name) {
-    new TableTypifiedSelect(getElementInColumn(StepsTableColumns.NAME, NAME_SELECT)).select(name);
+    new TableTypifiedSelect(findElement(By.xpath(NAME_SELECT))).select(name);
   }
 
   public void typeAndSelectName(String name) {
-    new TableTypifiedSelect(getElementInColumn(StepsTableColumns.NAME, NAME_SELECT)).typeAndSelect(name);
+    new TableTypifiedSelect(findElement(By.xpath(NAME_SELECT))).typeAndSelect(name);
   }
 
   public List<String> getNames() {
-    return new TableTypifiedSelect(getElementInColumn(StepsTableColumns.NAME, NAME_SELECT)).getOptions();
+    return new TableTypifiedSelect(findElement(By.xpath(NAME_SELECT))).getOptions();
   }
 
   public void selectAction(String action) {
-    new TableSelect(findElement(id("dDAction"))).select(action);
+    new ActionSelect(findElement(By.xpath(ACTION_SELECT))).select(action);
   }
 
   public void clickAddStep() {
-    getElementInColumn(StepsTableColumns.OTHER, "/input[@type='button']").click();
+    addButton.click();
   }
 
   public void typeArgument(String name, String value) {
-    String argInputXpath = String.format("//table//td[label[text()='%s']]/input[@type='text']", name);
+    String argInputXpath = String.format(".//table//td[label[text()='%s']]/input[@type='text']", name);
 
-    DriverUtils.waitUntilVisible(this, getElementInColumnXpath(StepsTableColumns.ACTION_AND_ARGS, argInputXpath));
-    getElementInColumn(StepsTableColumns.ACTION_AND_ARGS, argInputXpath)
-        .sendKeys(value);
+    DriverUtils.waitUntilVisible(this, argInputXpath);
+    findElement(By.xpath(argInputXpath)).sendKeys(value);
   }
 
   public List<String> getArguments() {
-    return getElementsInColumn(StepsTableColumns.ACTION_AND_ARGS, "//table//label")
-        .stream().map(WebElement::getText).collect(Collectors.toList());
+    return findElements(By.xpath(".//table//label")).stream()
+        .map(WebElement::getText)
+        .collect(Collectors.toList());
   }
 
-  private WebElement getElementInColumn(StepsTableColumns column, String xpath) {
-    return getElementsInColumn(column, xpath).get(0);
-  }
-
-  private List<WebElement> getElementsInColumn(StepsTableColumns column, String xpath) {
-    return findElements(xpath(getElementInColumnXpath(column, xpath)));
-  }
-
-  private String getElementInColumnXpath(StepsTableColumns column, String xpath) {
-    return format(COLUMN, column.getColumn()) + xpath;
-  }
 }

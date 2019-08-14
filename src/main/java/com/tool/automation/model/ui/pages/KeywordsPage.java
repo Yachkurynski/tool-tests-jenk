@@ -5,6 +5,7 @@ import com.tool.automation.model.ui.beans.ObjectAction;
 import com.tool.automation.model.enums.TestObjectsType;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimaps;
+import com.tool.automation.model.ui.utils.DriverUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +60,11 @@ public class KeywordsPage extends Page {
 
   public void importData(String pathToFile) {
     manageDataBtn.click();
-    findElement(By.id("dumpImport")).sendKeys(pathToFile);
+
+    By dumpBtn = By.id("dumpImport");
+
+    DriverUtils.waitUntilVisible(getDriver(), dumpBtn);
+    findElement(dumpBtn).sendKeys(pathToFile);
     manageDataBtn.click();
   }
 

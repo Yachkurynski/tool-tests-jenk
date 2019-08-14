@@ -3,6 +3,7 @@ package com.tool.automation.implementation.ui;
 import com.tool.automation.model.ui.pages.TestStepsTable;
 import com.tool.automation.generated.base.ITestActions;
 import java.util.List;
+import java.util.Map;
 import org.testng.Assert;
 
 public class UITestActions extends UICommonActions implements ITestActions {
@@ -43,7 +44,7 @@ public class UITestActions extends UICommonActions implements ITestActions {
   }
 
   @Override
-  public void hasArguments(List<String> arguments, Double row) {
+  public void hasArguments(Double row, Map<String, String> arguments) {
     Assert.assertEquals(table().getArgumentsColumnValues(row.intValue()), arguments);
   }
 

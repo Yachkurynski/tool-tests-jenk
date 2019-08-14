@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.tool.automation.model.enums.StepsTableColumns;
 import com.tool.automation.model.ui.elements.TableSelect;
 import java.lang.reflect.Type;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ public class TestStepsTable extends HtmlElement {
   private static final String ROW = "./tbody/tr[%d]";
   private static final String CELL_DATA = ROW + "/td[%d]";
 
-  @FindBy(xpath = ".//tbody/tr[td[input[@type='button']]]")
+  @FindBy(xpath = ".//tbody/tr/td/form")
   private NewStepForm newStep;
 
   public List<String> getActionsColumnValues() {
@@ -53,9 +53,12 @@ public class TestStepsTable extends HtmlElement {
     return getColumnValues(format(COLUMN_DATA, StepsTableColumns.OBJECT.getColumn()) + "/b");
   }
 
-  public List<String> getArgumentsColumnValues(int row) {
-    return Arrays.asList(findElement(getCellLocator(row, StepsTableColumns.ACTION_AND_ARGS, "/div"))
-        .getText().split(","));
+  public Map<String, String> getArgumentsColumnValues(int row) {
+    String args = findElement(getCellLocator(row, StepsTableColumns.ACTION_AND_ARGS, "/div"))
+        .getText();
+
+    return StringUtils.isBlank(args) ? new HashMap<>() :
+        parseArguments(String.format("{%s}", args.replace(" = ", ":")));
   }
 
   private List<String> getColumnValues(String columnXpath) {
@@ -80,7 +83,7 @@ public class TestStepsTable extends HtmlElement {
   private Map<String, String> parseArguments(String arguments) {
     Type dataType = new TypeToken<Map<String, String>>() {}.getType();
 
-    return new Gson().fromJson(String.format("{%s}", arguments), dataType);
+    return new Gson().fromJson(arguments, dataType);
   }
 
   private By getCellLocator(int row, StepsTableColumns column, String xpath) {

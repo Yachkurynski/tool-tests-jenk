@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum ColumnNames {
-  TEST_OBJECT("Test Object"),
-  NAME("Name"),
-  ACTION("Action"),
-  PARAMETERS("Parameters");
+  TEST_OBJECT("Object Type"),
+  NAME("Object Name"),
+  ACTION("Actions"),
+  PARAMETERS("Arguments");
 
   @Getter
   private String name;
