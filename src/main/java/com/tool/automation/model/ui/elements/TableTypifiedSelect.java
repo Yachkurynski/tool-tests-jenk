@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.TextInput;
 
+import java.util.List;
+
 public class TableTypifiedSelect extends TableSelect {
 
   @FindBy(xpath = ".//input[contains(@class, 'dropdown-select-input')]")
@@ -19,7 +21,13 @@ public class TableTypifiedSelect extends TableSelect {
   public void typeAndSelect(String value) {
     getExpandButton().click();
     nameInput.sendKeys(value);
-    findElement(By.xpath(format(".//div[@role='list']/div[.='add \"%s\"']", value))).click();
+    List<WebElement> options = findElements(By.xpath(getOptionXpath()));
+
+    if (options.isEmpty()) {
+      findElement(By.xpath(format(".//div[@role='list']/div[.='add \"%s\"']", value))).click();
+    } else {
+      options.stream().filter(o -> o.getText().equals(value)).findFirst().orElseThrow().click();
+    }
   }
 
   @Override
