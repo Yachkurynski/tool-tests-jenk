@@ -63,4 +63,20 @@ public class AddStepForm
         getAddStepFormActions().selectExistingName(name);
     }
 
+    @Test
+    @Parameters({
+        "name",
+        "suggestions"
+    })
+    public void hasNamesStartWith(String name,
+        @Named("List.String")
+        String suggestions_JsonListOfString) {
+        getAddStepFormActions().hasNamesStartWith(name, jsonToList(suggestions_JsonListOfString, String.class));
+    }
+
+    @Test
+    public void clickAddStep() {
+        getAddStepFormActions().clickAddStep();
+    }
+
 }
