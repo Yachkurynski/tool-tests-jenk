@@ -7,6 +7,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.tool.automation.model.enums.StepsTableColumns;
 import com.tool.automation.model.ui.elements.TableSelect;
+import com.tool.automation.model.ui.utils.DriverUtils;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -57,8 +58,7 @@ public class TestStepsTable extends HtmlElement {
     String args = findElement(getCellLocator(row, StepsTableColumns.ACTION_AND_ARGS, "/div"))
         .getText();
 
-    return StringUtils.isBlank(args) ? new HashMap<>() :
-        parseArguments(String.format("{%s}", args.replace(" = ", ":")));
+    return StringUtils.isBlank(args) ? new HashMap<>() : parseArguments(convertToJSONFormat(args));
   }
 
   private List<String> getColumnValues(String columnXpath) {
@@ -68,16 +68,18 @@ public class TestStepsTable extends HtmlElement {
   }
 
   private void addNewStep(String object, String name, String action, String arguments) {
+    int initialSize = getObjectsColumnValues().size();
 
     newStep.selectObject(object);
     newStep.typeAndSelectName(name);
     newStep.selectAction(action);
 
     if (StringUtils.isNotBlank(arguments)) {
-      Map<String, String> argsMap = parseArguments(arguments);
-      argsMap.forEach(newStep::typeArgument);
+      parseArguments(arguments).forEach(newStep::typeArgument);
     }
     newStep.clickAddStep();
+
+    DriverUtils.waitUntil(this, t -> initialSize < getObjectsColumnValues().size());
   }
 
   private Map<String, String> parseArguments(String arguments) {
@@ -118,5 +120,9 @@ public class TestStepsTable extends HtmlElement {
 
   public void selectName(String name) {
     new NewStepForm().selectName(name);
+  }
+
+  private String convertToJSONFormat(String source) {
+    return String.format("{%s}", source.replace(" = ", ":").replace(" |", ","));
   }
 }

@@ -39,15 +39,15 @@ public abstract class CommonTestObject {
         this.locationName = locationName;
     }
 
-    protected<T >List<T> jsonToList(String jsonSource, Class<T> listItemType) {
-                Type dataType = new TypeToken<List<T>>() {}.getType();
+    protected<T >List<T> jsonToList(String jsonSource) {
+                Type dataType = new TypeToken<List<String>>() {}.getType();
 
         return new Gson().fromJson(jsonSource, dataType);
 
     }
 
-    protected<T >Map<String, T> jsonToMap(String jsonSource, Class<T> mapItemType) {
-                Type dataType = new TypeToken<Map<String, T>>() {}.getType();
+    protected<T >Map<String, T> jsonToMap(String jsonSource) {
+                Type dataType = new TypeToken<Map<String, String>>() {}.getType();
 
         return new Gson().fromJson(jsonSource, dataType);
 

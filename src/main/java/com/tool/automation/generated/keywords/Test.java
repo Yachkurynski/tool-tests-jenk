@@ -67,7 +67,7 @@ public class Test
     public void hasLocationNames(
         @Named("List.String")
         String names_JsonListOfString) {
-        getTestActions().hasLocationNames(jsonToList(names_JsonListOfString, String.class));
+        getTestActions().hasLocationNames(jsonToList(names_JsonListOfString));
     }
 
     @org.testng.annotations.Test
@@ -77,7 +77,7 @@ public class Test
     public void hasTestObjects(
         @Named("List.String")
         String objects_JsonListOfString) {
-        getTestActions().hasTestObjects(jsonToList(objects_JsonListOfString, String.class));
+        getTestActions().hasTestObjects(jsonToList(objects_JsonListOfString));
     }
 
     @org.testng.annotations.Test
@@ -87,7 +87,7 @@ public class Test
     public void hasObjectActions(
         @Named("List.String")
         String actions_JsonListOfString) {
-        getTestActions().hasObjectActions(jsonToList(actions_JsonListOfString, String.class));
+        getTestActions().hasObjectActions(jsonToList(actions_JsonListOfString));
     }
 
     @org.testng.annotations.Test
@@ -98,7 +98,7 @@ public class Test
     public void hasArguments(Double row,
         @Named("Map.String")
         String arguments_JsonMapOfString) {
-        getTestActions().hasArguments(row, jsonToMap(arguments_JsonMapOfString, String.class));
+        getTestActions().hasArguments(row, jsonToMap(arguments_JsonMapOfString));
     }
 
 }

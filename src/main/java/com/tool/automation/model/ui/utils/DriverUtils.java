@@ -1,6 +1,7 @@
 package com.tool.automation.model.ui.utils;
 
 import java.time.Duration;
+import java.util.function.Function;
 import org.openqa.selenium.By;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -19,5 +20,11 @@ public class DriverUtils {
     new FluentWait<>(context)
         .withTimeout(Duration.ofMillis(TIMEOUT_MILLIS))
         .until(c -> !c.findElements(by).isEmpty());
+  }
+
+  public static <T, V> void waitUntil(T context, Function<T, V> function) {
+    new FluentWait<>(context)
+        .withTimeout(Duration.ofMillis(TIMEOUT_MILLIS))
+        .until(function);
   }
 }

@@ -2,6 +2,7 @@ package com.tool.automation.model.ui.elements;
 
 import static java.lang.String.format;
 
+import com.tool.automation.core.exceptions.ATToolRuntimeException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,7 +27,8 @@ public class TableTypifiedSelect extends TableSelect {
     if (options.isEmpty()) {
       findElement(By.xpath(format(".//div[@role='list']/div[.='add \"%s\"']", value))).click();
     } else {
-      options.stream().filter(o -> o.getText().equals(value)).findFirst().orElseThrow().click();
+      options.stream().filter(o -> o.getText().equals(value)).findFirst().orElseThrow(
+          ATToolRuntimeException::new).click();
     }
   }
 

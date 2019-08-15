@@ -26,7 +26,7 @@ public class AddStepForm
     public void hasLocationNames(
         @Named("List.String")
         String names_JsonListOfString) {
-        getAddStepFormActions().hasLocationNames(jsonToList(names_JsonListOfString, String.class));
+        getAddStepFormActions().hasLocationNames(jsonToList(names_JsonListOfString));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class AddStepForm
     public void hasParameters(
         @Named("List.String")
         String parameters_JsonListOfString) {
-        getAddStepFormActions().hasParameters(jsonToList(parameters_JsonListOfString, String.class));
+        getAddStepFormActions().hasParameters(jsonToList(parameters_JsonListOfString));
     }
 
     @Test
