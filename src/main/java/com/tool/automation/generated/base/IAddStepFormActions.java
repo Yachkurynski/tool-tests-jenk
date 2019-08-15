@@ -20,4 +20,8 @@ public interface IAddStepFormActions
 
     void selectExistingName(String name);
 
+    void hasNamesStartWith(String name, List<String> suggestions);
+
+    void clickAddStep();
+
 }
