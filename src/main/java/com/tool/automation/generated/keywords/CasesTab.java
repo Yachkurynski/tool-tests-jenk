@@ -18,7 +18,7 @@ public class CasesTab
     public void hasSuitesList(
         @Named("List.String")
         String suitesList_JsonListOfString) {
-        getCasesTabActions().hasSuitesList(jsonToList(suitesList_JsonListOfString));
+        getCasesTabActions().hasSuitesList(jsonToList(suitesList_JsonListOfString, String.class));
     }
 
     @Test

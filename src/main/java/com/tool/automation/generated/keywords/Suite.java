@@ -18,7 +18,7 @@ public class Suite
     public void hasTestsList(
         @Named("List.String")
         String testsList_JsonListOfString) {
-        getSuiteActions().hasTestsList(jsonToList(testsList_JsonListOfString));
+        getSuiteActions().hasTestsList(jsonToList(testsList_JsonListOfString, String.class));
     }
 
     @Test
