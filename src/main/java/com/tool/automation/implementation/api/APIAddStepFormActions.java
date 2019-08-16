@@ -34,4 +34,14 @@ public class APIAddStepFormActions extends APICommonActions implements IAddStepF
   public void selectExistingName(String name) {
 
   }
+
+  @Override
+  public void hasNamesStartWith(String name, List<String> suggestions) {
+
+  }
+
+  @Override
+  public void clickAddStep() {
+
+  }
 }

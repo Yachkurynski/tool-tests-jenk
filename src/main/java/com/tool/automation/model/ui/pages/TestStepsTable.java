@@ -99,30 +99,38 @@ public class TestStepsTable extends HtmlElement {
   }
 
   public void selectObject(String object) {
-    new NewStepForm().selectObject(object);
+    newStep.selectObject(object);
   }
 
   public List<String> getLocationNames() {
-    return new NewStepForm().getNames();
+    return newStep.getNames();
   }
 
   public void selectAction(String action) {
-    new NewStepForm().selectAction(action);
+    newStep.selectAction(action);
   }
 
   public List<String> getParameters() {
-    return new NewStepForm().getArguments();
+    return newStep.getArguments();
   }
 
   public void typeAndSelectName(String name) {
-    new NewStepForm().typeAndSelectName(name);
+    newStep.typeAndSelectName(name);
   }
 
   public void selectName(String name) {
-    new NewStepForm().selectName(name);
+    newStep.selectName(name);
+  }
+
+  public void clickAddStep() {
+    newStep.clickAddStep();
   }
 
   private String convertToJSONFormat(String source) {
     return String.format("{%s}", source.replace(" = ", ":").replace(" |", ","));
+  }
+
+  public List<String> getNamesStartWith(String name) {
+    return newStep.getNamesStartWith(name);
   }
 }

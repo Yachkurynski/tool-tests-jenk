@@ -70,4 +70,7 @@ public class NewStepForm extends HtmlElement {
         .collect(Collectors.toList());
   }
 
+  public List<String> getNamesStartWith(String name) {
+    return new TableTypifiedSelect(findElement(By.xpath(NAME_SELECT))).getSuggestions(name);
+  }
 }

@@ -37,6 +37,16 @@ public class UIAddStepFormActions extends UICommonActions implements IAddStepFor
     table().selectName(name);
   }
 
+  @Override
+  public void hasNamesStartWith(String name, List<String> suggestions) {
+    Assert.assertEquals(table().getNamesStartWith(name), suggestions);
+  }
+
+  @Override
+  public void clickAddStep() {
+    table().clickAddStep();
+  }
+
   private TestStepsTable table() {
     return getFactory().getCasesPage().getStepsTable();
   }
