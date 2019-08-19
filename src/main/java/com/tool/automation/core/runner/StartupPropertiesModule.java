@@ -2,7 +2,6 @@ package com.tool.automation.core.runner;
 
 import com.google.inject.AbstractModule;
 import com.tool.automation.core.utils.PropertyUtils;
-
 public class StartupPropertiesModule extends AbstractModule {
 
   @Override
@@ -13,4 +12,5 @@ public class StartupPropertiesModule extends AbstractModule {
 
     bind(Config.class).toInstance(config);
   }
+
 }

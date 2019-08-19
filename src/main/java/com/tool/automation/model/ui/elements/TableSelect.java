@@ -18,18 +18,18 @@ public class TableSelect extends TypifiedElement {
   }
 
   public void select(String value) {
-    getExpandButton().click();
+    expand();
     findElement(By.xpath(format(getOptionByNameXpath(), value))).click();
   }
 
   public List<String> getOptions() {
-    getExpandButton().click();
+    expand();
 
     List<String> options = findElements(By.xpath(getOptionXpath())).stream()
         .map(WebElement::getText)
         .collect(Collectors.toList());
 
-    getExpandButton().click();
+    expand();
 
     return options;
   }
@@ -38,9 +38,10 @@ public class TableSelect extends TypifiedElement {
     return ".//button[@aria-haspopup='true']";
   }
 
-  protected WebElement getExpandButton() {
+  protected void expand() {
     DriverUtils.waitUntilVisible(getWrappedElement(), getExpandButtonXpath());
-    return findElement(By.xpath(getExpandButtonXpath()));
+
+    findElement(By.xpath(getExpandButtonXpath())).click();
   }
 
   protected String getOptionXpath() {

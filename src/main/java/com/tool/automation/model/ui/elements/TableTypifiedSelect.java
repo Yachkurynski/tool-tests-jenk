@@ -2,7 +2,10 @@ package com.tool.automation.model.ui.elements;
 
 import static java.lang.String.format;
 
+import com.tool.automation.core.exceptions.ATToolRuntimeException;
+import java.util.stream.Collectors;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.TextInput;
@@ -11,7 +14,7 @@ import java.util.List;
 
 public class TableTypifiedSelect extends TableSelect {
 
-  @FindBy(xpath = ".//input[contains(@class, 'dropdown-select-input')]")
+  @FindBy(xpath = "./input")
   private TextInput nameInput;
 
   public TableTypifiedSelect(WebElement wrappedElement) {
@@ -19,15 +22,35 @@ public class TableTypifiedSelect extends TableSelect {
   }
 
   public void typeAndSelect(String value) {
-    getExpandButton().click();
+    expand();
     nameInput.sendKeys(value);
     List<WebElement> options = findElements(By.xpath(getOptionXpath()));
 
     if (options.isEmpty()) {
-      findElement(By.xpath(format(".//div[@role='list']/div[.='add \"%s\"']", value))).click();
+      nameInput.sendKeys(Keys.ENTER);
     } else {
-      options.stream().filter(o -> o.getText().equals(value)).findFirst().orElseThrow().click();
+      options.stream().filter(o -> o.getText().equals(value)).findFirst().orElseThrow(
+          ATToolRuntimeException::new).click();
     }
+  }
+
+  public List<String> getSuggestions(String value) {
+    expand();
+
+    nameInput.clear();
+    nameInput.sendKeys(value);
+
+    List<String> suggestions = findElements(By.xpath(getOptionXpath())).stream()
+        .map(WebElement::getText)
+        .collect(Collectors.toList());
+
+    expand();
+    return suggestions;
+  }
+
+  @Override
+  protected void expand() {
+    nameInput.click();
   }
 
   @Override
@@ -37,6 +60,6 @@ public class TableTypifiedSelect extends TableSelect {
 
   @Override
   protected String getOptionXpath() {
-    return ".//span[@role='option']";
+    return ".//a[@href]";
   }
 }

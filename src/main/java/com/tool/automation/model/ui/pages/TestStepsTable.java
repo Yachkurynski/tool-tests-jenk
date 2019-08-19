@@ -7,6 +7,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.tool.automation.model.enums.StepsTableColumns;
 import com.tool.automation.model.ui.elements.TableSelect;
+import com.tool.automation.model.ui.utils.DriverUtils;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
@@ -57,8 +58,7 @@ public class TestStepsTable extends HtmlElement {
     String args = findElement(getCellLocator(row, StepsTableColumns.ACTION_AND_ARGS, "/div"))
         .getText();
 
-    return StringUtils.isBlank(args) ? new HashMap<>() :
-        parseArguments(String.format("{%s}", args.replace(" = ", ":")));
+    return StringUtils.isBlank(args) ? new HashMap<>() : parseArguments(convertToJSONFormat(args));
   }
 
   private List<String> getColumnValues(String columnXpath) {
@@ -68,16 +68,14 @@ public class TestStepsTable extends HtmlElement {
   }
 
   private void addNewStep(String object, String name, String action, String arguments) {
-
     newStep.selectObject(object);
     newStep.typeAndSelectName(name);
     newStep.selectAction(action);
 
     if (StringUtils.isNotBlank(arguments)) {
-      Map<String, String> argsMap = parseArguments(arguments);
-      argsMap.forEach(newStep::typeArgument);
+      parseArguments(arguments).forEach(newStep::typeArgument);
     }
-    newStep.clickAddStep();
+    clickAddStep();
   }
 
   private Map<String, String> parseArguments(String arguments) {
@@ -97,26 +95,41 @@ public class TestStepsTable extends HtmlElement {
   }
 
   public void selectObject(String object) {
-    new NewStepForm().selectObject(object);
+    newStep.selectObject(object);
   }
 
   public List<String> getLocationNames() {
-    return new NewStepForm().getNames();
+    return newStep.getNames();
   }
 
   public void selectAction(String action) {
-    new NewStepForm().selectAction(action);
+    newStep.selectAction(action);
   }
 
   public List<String> getParameters() {
-    return new NewStepForm().getArguments();
+    return newStep.getArguments();
   }
 
   public void typeAndSelectName(String name) {
-    new NewStepForm().typeAndSelectName(name);
+    newStep.typeAndSelectName(name);
   }
 
   public void selectName(String name) {
-    new NewStepForm().selectName(name);
+    newStep.selectName(name);
+  }
+
+  public void clickAddStep() {
+    int initialSize = getObjectsColumnValues().size();
+
+    newStep.clickAddStep();
+    DriverUtils.waitUntil(this, t -> initialSize < getObjectsColumnValues().size());
+  }
+
+  private String convertToJSONFormat(String source) {
+    return String.format("{%s}", source.replace(" = ", ":").replace(" |", ","));
+  }
+
+  public List<String> getNamesStartWith(String name) {
+    return newStep.getNamesStartWith(name);
   }
 }

@@ -4,39 +4,35 @@ package com.tool.automation.core.runner;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.tool.automation.core.beans.SingleTest;
-import com.tool.automation.core.parsers.ExcelTestParser;
-import java.io.File;
-import java.util.Arrays;
+import com.tool.automation.core.exceptions.ATToolRuntimeException;
+import com.tool.automation.core.parsers.TestParser;
+import com.tool.automation.core.parsers.TestParserResolver;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.testng.TestNG;
 
 public class ToolTestRunner {
 
+  private static final String TESTS_PATH_1 = "com.tool.automation.generated.keywords.";
+
   public static void main(String[] args) {
     Injector injector = Guice.createInjector(new StartupPropertiesModule());
-    Config config = injector.getInstance(Config.class);
-
     TestNGBuilder builder = new TestNGBuilder();
 
     builder.withListener(injector.getInstance(ATToolListener.class));
     builder.withParentModule(ToolActionsModule.class);
 
-    Map<String, SingleTest> testFlow = new LinkedHashMap<>();
-    File source = new File(config.getExcel());
-    AtomicInteger fileCounter = new AtomicInteger(1);
+    TestParser testParser = TestParserResolver.getTestParser(injector.getInstance(Config.class));
 
-    if(source.isDirectory()) {
-      Arrays.asList(source.listFiles()).forEach(f->fillTestFlow(f, fileCounter.getAndIncrement(), testFlow));
-    } else {
-      fillTestFlow(source, fileCounter.getAndIncrement(), testFlow);
-    }
+    AtomicInteger fileCounter = new AtomicInteger(1);
+    Map<String, SingleTest> testFlow = getTestFlow(fileCounter.getAndIncrement(), testParser.get());
 
     testFlow.forEach((testName, test)->{
-      builder.withTestClass(testName, test.getTestClass());
-      builder.withTestParameter(testName, "objectName", test.getName());
-      builder.withTestMethod(testName, test.getTestMethod(), test.getParameters());
+      builder.withTestClass(testName, getTestClass(test.getObject()));
+      builder.withTestParameter(testName, "objectName", test.getLocationName());
+      builder.withTestMethod(testName, test.getAction(), test.getArguments());
     });
 
     TestNG testng = builder.build();
@@ -46,10 +42,22 @@ public class ToolTestRunner {
     System.exit(testng.getStatus());
   }
 
-  private static void fillTestFlow(File source, int fileCounter, Map<String, SingleTest> testFlow) {
+  private static Map<String, SingleTest> getTestFlow(int fileCounter, List<SingleTest> tests) {
+    Map<String, SingleTest> testFlow = new LinkedHashMap<>();
     AtomicInteger counter = new AtomicInteger(1);
 
-    ExcelTestParser.of(source).get()
-        .forEach(test->testFlow.put(String.format("%d.%d [%s] %s", fileCounter, counter.getAndIncrement(), source.getName(), test.toString()), test));
+    tests.forEach(test->testFlow.put(
+        String.format("%d.%d %s", fileCounter, counter.getAndIncrement(), test.toString()),
+        test));
+
+    return testFlow;
+  }
+
+  private static Class<?> getTestClass(String className) {
+    try {
+      return ClassLoader.getSystemClassLoader().loadClass(TESTS_PATH_1 + className);
+    } catch (ClassNotFoundException e) {
+      throw new ATToolRuntimeException(e);
+    }
   }
 }
