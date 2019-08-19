@@ -36,11 +36,11 @@ class Tool {
 
     String runJar() {
         String paramString = "-Durl=\"${pipe.params.application_url}\""
-        + " -Dexcel=\"test-input/${pipe.params.suite}/${pipe.params.case}.xlsx\""
-        + " -DcaseNumber=\"${pipe.params.case_number}\""
+                .concat(" -Dexcel=\"test-input/${pipe.params.suite}/${pipe.params.case}.xlsx\"")
+                .concat(" -DcaseNumber=${pipe.params.case_number}")
 
         if (pipe.params.api) {
-            paramString = paramString + " -Dapi=false"
+            paramString = paramString.concat(" -Dapi=false")
         }
         pipe.bat "java ${paramString} -cp at_tool-1.0.jar ${mainClass}"
     }
