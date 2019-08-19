@@ -1,6 +1,5 @@
 package com.tool.automation.model.ui.pages;
 
-import com.tool.automation.model.ui.elements.ActionSelect;
 import com.tool.automation.model.ui.elements.TableTypifiedSelect;
 import com.tool.automation.model.ui.utils.DriverUtils;
 import java.util.List;
@@ -19,8 +18,8 @@ public class NewStepForm extends HtmlElement {
   private static final String ARGUMENT_INPUT_XPATH = ".//table//td[label[text()='%s']]/input[@type='text']";
   private static final String ARGUMENT_NAME_XPATH = ".//table//label";
   private static final String OBJECT_SELECT = "./select[1]";
-  private static final String NAME_SELECT = "./div[1]/div";
-  private static final String ACTION_SELECT = "./div[contains(@class, 'dropdown')]";
+  private static final String NAME_SELECT = "./div[1]";
+  private static final String ACTION_SELECT = "./select[2]";
 
   @FindBy(xpath = "./button[@type='submit']")
   private Button addButton;
@@ -50,7 +49,7 @@ public class NewStepForm extends HtmlElement {
   }
 
   public void selectAction(String action) {
-    new ActionSelect(findElement(By.xpath(ACTION_SELECT))).select(action);
+    new Select(findElement(By.xpath(ACTION_SELECT))).selectByVisibleText(action);
   }
 
   public void clickAddStep() {

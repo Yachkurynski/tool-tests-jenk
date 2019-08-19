@@ -18,4 +18,8 @@ public class Config {
   @Inject
   @Named("api")
   private boolean api;
+
+  @Inject
+  @Named("caseNumber")
+  private int caseNumber;
 }

@@ -1,12 +1,14 @@
 package com.tool.automation.core.parsers;
 
 import com.tool.automation.core.beans.SingleTest;
+import com.tool.automation.core.beans.TestArgument;
 import com.tool.automation.core.enums.ColumnNames;
 import com.tool.automation.core.exceptions.ATToolRuntimeException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,10 +25,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 @RequiredArgsConstructor(staticName = "of")
-public class ExcelTestParser {
-
-    private static final String TESTS_PATH = "com.epam.ipipeline.test.model.";
-    private static final String TESTS_PATH_1 = "com.tool.automation.generated.keywords.";
+public class ExcelTestParser implements TestParser {
 
     private final File source;
     private Sheet sheet;
@@ -61,33 +60,28 @@ public class ExcelTestParser {
 
     private SingleTest createSingleTest(Row row) {
         return SingleTest.builder()
-                .testClass(getTestClass(getCellValue(row, ColumnNames.TEST_OBJECT)))
-                .name(getCellValue(row, ColumnNames.NAME))
-                .testMethod(getCellValue(row, ColumnNames.ACTION))
-                .parameters(getParams(row)).build();
-    }
-
-    private Class<?> getTestClass(String className) {
-        try {
-            return ClassLoader.getSystemClassLoader().loadClass(TESTS_PATH_1 + className);
-        } catch (ClassNotFoundException e) {
-            throw new ATToolRuntimeException(e);
-        }
+                .object(getCellValue(row, ColumnNames.TEST_OBJECT))
+                .locationName(getCellValue(row, ColumnNames.NAME))
+                .action(getCellValue(row, ColumnNames.ACTION))
+                .arguments(getParams(row)).build();
     }
 
     private String getCellValue(Row row, ColumnNames column) {
         return row.getCell(headers.get(column)).getStringCellValue();
     }
 
-    private Map<String, String> getParams(Row row) {
-        Map<String, String> parameters = new HashMap<>();
+    private List<TestArgument> getParams(Row row) {
+        List<TestArgument> arguments = new ArrayList<>();
         String paramStr = getCellValue(row, ColumnNames.PARAMETERS);
 
         if (StringUtils.isNotBlank(paramStr)) {
             Arrays.stream(paramStr.split(";")).forEach(str ->
-                    parameters.put(StringUtils.substringBefore(str, "="),
-                            StringUtils.substringAfter(str, "=")));
+                arguments.add(new TestArgument(
+                    StringUtils.substringBefore(str, "="),
+                    StringUtils.substringAfter(str, "=")))
+
+            );
         }
-        return parameters;
+        return arguments;
     }
 }

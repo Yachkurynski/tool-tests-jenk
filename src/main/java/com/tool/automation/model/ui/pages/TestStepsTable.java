@@ -68,8 +68,6 @@ public class TestStepsTable extends HtmlElement {
   }
 
   private void addNewStep(String object, String name, String action, String arguments) {
-    int initialSize = getObjectsColumnValues().size();
-
     newStep.selectObject(object);
     newStep.typeAndSelectName(name);
     newStep.selectAction(action);
@@ -77,9 +75,7 @@ public class TestStepsTable extends HtmlElement {
     if (StringUtils.isNotBlank(arguments)) {
       parseArguments(arguments).forEach(newStep::typeArgument);
     }
-    newStep.clickAddStep();
-
-    DriverUtils.waitUntil(this, t -> initialSize < getObjectsColumnValues().size());
+    clickAddStep();
   }
 
   private Map<String, String> parseArguments(String arguments) {
@@ -123,7 +119,10 @@ public class TestStepsTable extends HtmlElement {
   }
 
   public void clickAddStep() {
+    int initialSize = getObjectsColumnValues().size();
+
     newStep.clickAddStep();
+    DriverUtils.waitUntil(this, t -> initialSize < getObjectsColumnValues().size());
   }
 
   private String convertToJSONFormat(String source) {
