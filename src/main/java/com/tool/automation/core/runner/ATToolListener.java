@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -17,7 +18,23 @@ import org.testng.ITestResult;
 @Log4j
 public class ATToolListener extends ReportPortalTestNGListener {
 
+  private static final int DEFAULT_CASE = -1;
+  private static final String RP_TAG_PROP = "rp.tags";
+  private static final String CASE_ID_TAG = "cid-[%d]";
+
   @Inject private Config config;
+
+  @Override
+  public void onExecutionStart() {
+    if (isUseCase()) {
+      String cidTag = String.format(CASE_ID_TAG, config.getCaseNumber());
+      String tags = System.getProperty(RP_TAG_PROP);
+
+      System.setProperty(RP_TAG_PROP, StringUtils.isBlank(tags) ?
+          cidTag : String.join(";", tags, cidTag));
+    }
+    super.onExecutionStart();
+  }
 
   @Override
   public void onTestStart(ITestResult iTestResult) {
@@ -60,5 +77,9 @@ public class ATToolListener extends ReportPortalTestNGListener {
     } finally {
       FileUtils.deleteQuietly(screenShot);
     }
+  }
+
+  private boolean isUseCase() {
+    return config.getCaseNumber() != DEFAULT_CASE;
   }
 }
