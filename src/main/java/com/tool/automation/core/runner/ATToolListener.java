@@ -7,9 +7,10 @@ import com.epam.reportportal.message.ReportPortalMessage;
 import com.epam.reportportal.testng.ReportPortalTestNGListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -28,10 +29,9 @@ public class ATToolListener extends ReportPortalTestNGListener {
   public void onExecutionStart() {
     if (isUseCase()) {
       String cidTag = String.format(CASE_ID_TAG, config.getCaseNumber());
-      String tags = System.getProperty(RP_TAG_PROP);
+      List<String> props = Arrays.asList(System.getProperty(RP_TAG_PROP), cidTag);
 
-      System.setProperty(RP_TAG_PROP, StringUtils.isBlank(tags) ?
-          cidTag : String.join(";", tags, cidTag));
+      System.setProperty(RP_TAG_PROP, String.join(";", props));
     }
     super.onExecutionStart();
   }
