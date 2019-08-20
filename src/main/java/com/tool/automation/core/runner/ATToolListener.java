@@ -7,6 +7,8 @@ import com.epam.reportportal.message.ReportPortalMessage;
 import com.epam.reportportal.testng.ReportPortalTestNGListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
@@ -17,7 +19,22 @@ import org.testng.ITestResult;
 @Log4j
 public class ATToolListener extends ReportPortalTestNGListener {
 
+  private static final int DEFAULT_CASE = -1;
+  private static final String RP_TAG_PROP = "rp.tags";
+  private static final String CASE_ID_TAG = "cid-[%d]";
+
   @Inject private Config config;
+
+  @Override
+  public void onExecutionStart() {
+    if (isUseCase()) {
+      String cidTag = String.format(CASE_ID_TAG, config.getCaseNumber());
+      List<String> props = Arrays.asList(System.getProperty(RP_TAG_PROP), cidTag);
+
+      System.setProperty(RP_TAG_PROP, String.join(";", props));
+    }
+    super.onExecutionStart();
+  }
 
   @Override
   public void onTestStart(ITestResult iTestResult) {
@@ -60,5 +77,9 @@ public class ATToolListener extends ReportPortalTestNGListener {
     } finally {
       FileUtils.deleteQuietly(screenShot);
     }
+  }
+
+  private boolean isUseCase() {
+    return config.getCaseNumber() != DEFAULT_CASE;
   }
 }
