@@ -22,4 +22,8 @@ public class Config {
   @Inject
   @Named("caseNumber")
   private int caseNumber;
+
+  @Inject
+  @Named("tool.url")
+  private String toolUrl;
 }

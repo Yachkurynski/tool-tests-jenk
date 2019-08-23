@@ -37,6 +37,10 @@ class Tool {
     String runJar() {
         String paramString = ["-Durl=\"${pipe.params.application_url}\""
                 , "-Dexcel=\"test-input/${pipe.params.suite}/${pipe.params.case}.xlsx\""
+                , "-Drp.endpoint=\"${pipe.params.rp_url}\""
+                , "-Drp.project=\"${pipe.params.rp_project}\""
+                , "-Drp.uuid=\"${pipe.params.rp_uuid}\""
+                , "-Dtool.url=\"${pipe.params.tool_url}\""
                 , "-DcaseNumber=${pipe.params.case_number}"].join(" ")
 
         if (pipe.params.api) {
