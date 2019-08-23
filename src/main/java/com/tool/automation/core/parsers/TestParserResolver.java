@@ -12,7 +12,7 @@ public class TestParserResolver {
 
   public static TestParser getTestParser(Config config) {
     return isUseCase(config) ?
-        JsonTestParser.of(TestApiClient.getCase(config.getUrl(), config.getCaseNumber())) :
+        JsonTestParser.of(TestApiClient.getCase(config.getToolUrl(), config.getCaseNumber())) :
         ExcelTestParser.of(new File(config.getExcel()));
   }
 
