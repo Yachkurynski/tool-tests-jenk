@@ -21,7 +21,7 @@ public class ATToolListener extends ReportPortalTestNGListener {
 
   private static final int DEFAULT_CASE = -1;
   private static final String RP_TAG_PROP = "rp.tags";
-  private static final String CASE_ID_TAG = "cid-[%d]";
+  private static final String CASE_ID_TAG = "cid-%d";
 
   @Inject private Config config;
 
